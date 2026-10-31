@@ -29,8 +29,11 @@ async function show() {
   await lib.ready;
   const g = lib.geofenceResults || {};
   const blocked = Boolean(g.redirectUrl) && g.autoRedirect !== false;
+  const onRestrictedPage = location.pathname.endsWith('/restricted.html');
   status.textContent = blocked
-    ? g.challenge && g.challenge.allow
+    ? onRestrictedPage
+      ? 'Restricted location: redirected here, and staying (no loop).'
+      : g.challenge && g.challenge.allow
       ? 'Restricted location: the location check dialog is shown.'
       : 'Restricted location: redirecting…'
     : 'Allowed: no restriction for this connection.';
